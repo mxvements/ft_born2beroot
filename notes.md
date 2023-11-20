@@ -59,4 +59,72 @@ Descripción breve de todos los tipos de particiones:
 + Configure the package manager, w/o any additional software and w/o the package usage survey
 + Install GRUB boot on /dev/sda
 
+//
+
++ Install sudo
+	+ 1st, change to root user: 
+		+ su + passw
+	+ apt install sudo
+	+ sudo -V
++ Add user
+	+ sudo adduser login -> sudo adduser luciama2 (which already exists)
++ Create group
+	+ sudo addgroup user42
+	+ Check group:
+		+ getent group user42
+		+ cat /etc/group
+//
+
++ Instalacion de ssh
+	+ sudo apt update
+	+ Install OpenSSH
+		+ sudo apt install openssh-server
+	+ Check install
+		+ sudo service ssh status
+```
+🧠 Que es SSH❓ Es el nombre de un protocolo y del programa que lo implementa cuya principal función es el acceso remoto a un servidor por medio de un canal seguro en el que toda la información está cifrada.
+```
++ Installing vim
+	+ apt update
+	+ apt install vim
++ Tras la instalacion de ssh, se editarán algunos ficheros de configuración (con nano o vim)
+	+ sudo nano /etc/ssh/ssh_config
+	+ reiniciar el servicio ssh para que se actualicen las modificaciones
+		+ sudo service ssh restart
+		+ sudo service ssh status (check)
+
+//
+
++ Instalacion y configuracion UFW
+	+ sudo apt install ufw
+	+ sudo ufw enable (check if it's enabled)
+	+ sudo ufw allow 4242
+	+ sudo ufw status
+```
+🧠 Que es UFW❓ Es un firewall el cual utiliza la línea de comandos para configurar las iptables usando un pequeño número de comandos simples.
+```
++ Configurar contraseña fuerte para sudo
+	+ crear fichero /etc/sudoers.d/ que se llamara sudo_config
+	+ touch  /etc/sudoers.d/sudo_config
+	+ Crear el directorio sudo en la ruta `var/log`porque cada comando que ejecutemos con sudo, tanto el input como el output, debe quedar almacenado en ese directorio
+		+ mkdir /var/log/sudo
+	+ Editar el fichero creado en el punto anterior para introducir los comando que pide el subject
+		+ vim /etc/sudoers.d/sudo_config
+			+ Defaults passwd_tries=3
+				+ numero de intentos en caso de introducir una constraseña incorrecta
+			+ Defaults badpass_message="Message"
+				+ Mensaje que se mostrará por pantall en caso de que la contraseña introducida sea incorrecta
+			+ Defaults lofgile="/var/log/sudo/sudo_config"
+				+ Archivo en el que quedarán registrados todos los comandos sudo
+			+ Defaults log_input, log_ouput
+				+ Para que cada comando ejecutado quede registrado en el directorio especificado, tanto los inputs como los ouputs
+			+ Defaults iolo_dir="/var/log/sudo"
+			+ Defaults requiretty
+				+ Para activar el modo TTY
+			+ Defaults secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
++ Configuración de política de constraseña fuerte
+	
+
+
+
 
