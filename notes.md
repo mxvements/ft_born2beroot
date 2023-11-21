@@ -339,3 +339,7 @@ Se usa el comando `hostname -I` para la dirección del host, e `ip link` para ob
 12 - Numero de comandos ejecutados con sudo
 
 Se usa el comando `journalctl _COMM=sudo` que recopila y administra los registros del sistema (Systemd) filtrando los entradas en su ruta (la de sudo). Después filtramos las lineas que contienen COMMAND y contamos las líneas: `journalctl _COMM=sudo | grep "COMMAND" | wc -l`
+
+13 - Comando `wall` para printear el resultado
+
+Por ultimo, para hacer el script, necesitaos guardar el resultado de cada comando en una variable y enviarlas a todos los usuarios que tengan una ventana de terminal abierta con el comando `wall` -- write all. Para enviar un mensaje de terminal a un unico usuario se usaría el comando `write`.
