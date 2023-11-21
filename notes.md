@@ -174,7 +174,7 @@ NOTES ON /etc/pam.d/common_password
 ´´´
 🧠 Que es un script❓ Es una secuencia de comandos guardada en un fichero que cuando se ejecuta hara la funcion de cada comando.
 ´´´
-1 - Architecture
+## 1 - Architecture
 
 Para poder ver la arquitectura del SO y su versión de kernel utilizamos el comando `uname -a` (flag -a equivale a --all) que basicamente printara toda la información excepto si el tipo de procesador es desconocido o la plataforma de hardware.
 
@@ -191,7 +191,7 @@ flags:
 -v      print the operating system version.
 ```
 
-2 - Núcleos físicos
+## 2 - Núcleos físicos
 
 Para poder mostrar el número de núcleos físicos haremos uso del fichero `/proc/cpuinfo` el cual proporciona información acerca del procesador: su tipo, marca, modelo, rendimiento, etc. 
 
@@ -205,11 +205,11 @@ man grep
 -- file pattern searcher
 ```
 
-3 - Núcleos virtuales
+## 3 - Núcleos virtuales
 
 Parecido al anteior pero buscando en `processor` -> grep processor /proc/cpuinfo | wc -l
 
-4 - Memoria RAM
+## 4 - Memoria RAM
 
 Usamos el comando `free` para ver al momento la información sobre la ram, la parte usada, la libre, reservada para otros recursos, etc. Usamos `free --mega` para mostrar la información en megabytes, tal y como aparece en el subject.
 La información nos la da como una tabla con la col1: tipo de memoria, col2: total (memoria total), col3: used, col4: free, col5: shared, col6: buff/cache, col7: available y en row1: Mem, row2: swap.
@@ -257,7 +257,7 @@ Análisis de la salida de wmstat en el apartado --cpu--
 Se usa además el comando `tail -1` para que nos de únicamente la última línea. El comando final es:
 + `vmstat 1 4 | tail -1 | awk '{print $15}'`
 
-Para tener el número final, habría que resultarle a ese tiempo de 'CPU desocupada' la cantidad que nos ha (?) devuelto nuestro comando, el resultado de la operación lo printearemos con un decimal y un % al final.
+Para tener el número final, habría que restarle a ese tiempo de 'CPU desocupada' la cantidad que nos ha (?) devuelto nuestro comando, el resultado de la operación lo printearemos con un decimal y un % al final.
 
 7 - Último reinicio
 
