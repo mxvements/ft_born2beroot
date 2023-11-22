@@ -224,7 +224,7 @@ man awk
 https://www.grymoire.com/Unix/Awk.html
 ```
 
-5 - Memoria del disco
+## 5 - Memoria del disco
 
 Para ver la memoria del disco ocupada y disponible utilizaremos el comando `df ` que significaa "disk filesystem" o "display free disk space", se usa para obtener un resumen completo del uso del espacio en disco. Como en el subject indica la memoria se muestra en MB, asi que usamos la flag `-m`. Este comando nos devuelve:
 - en $1 el Filesystem
@@ -241,12 +241,12 @@ Para el subject necesitamos la memoria usada (la suma de todos los $3) y el espa
 Por útlimo, debemos mostrar el porcentaje de memoria usada. Usamos un comando muy parecido en donde pasamos un script a `awk` en el que declaramos el mem_use como $3, el mem_tot con el $2 y printeamos la operacion (mem_use/mem_tot)*100 entre paréntesis:
 + `df -m | grep "/dev/" | grep -v "/boot" | awk '{mem_use += $3} {mem_tot += $2} END {printf("(%d%%)\n", mem_use/mem_tot*100)}'`
 
-6 - Porcentaje de uso de CPU
+## 6 - Porcentaje de uso de CPU
 
 https://www.ibm.com/docs/es/aix/7.3?topic=usage-memory-determination-vmstat-command
 https://www.ochobitshacenunbyte.com/2016/11/30/rendimiento-del-sistema-con-vmstat/
 
-Para ver el porcentaje de uso de la CPU usamos el comando `wmstat`, visualizador de memoria virtualque, permitiendo obtener un detalle (una estadística) general de los procesos, uso de memoria, actividad de CPU, estado del sistema, etc. Se puede sin intervalo de tiempo, o con vmstat [intervalo [numero] ], siendo intervalo el periodo de tiempo entre actualizaciones, en segundos, y el numero, es el numero de actualizaciones, si no se da numero se supone infinito.
+Para ver el porcentaje de uso de la CPU usamos el comando `wmstat`, visualizador de memoria virtual que permite obtener un detalle (una estadística) general de los procesos, uso de memoria, actividad de CPU, estado del sistema, etc. Se puede usar sin intervalo de tiempo, o con `vmstat [intervalo [numero] ]`, siendo intervalo el periodo de tiempo entre actualizaciones, en segundos, y el numero, el numero de actualizaciones, si no se da numero se supone infinito.
 
 Análisis de la salida de wmstat en el apartado --cpu--
 + us	% de uso por usuario
