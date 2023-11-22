@@ -343,3 +343,102 @@ Se usa el comando `journalctl _COMM=sudo` que recopila y administra los registro
 13 - Comando `wall` para printear el resultado
 
 Por ultimo, para hacer el script, necesitaos guardar el resultado de cada comando en una variable y enviarlas a todos los usuarios que tengan una ventana de terminal abierta con el comando `wall` -- write all. Para enviar un mensaje de terminal a un unico usuario se usaría el comando `write`.
+
+# Crontab
+
+```
+🧠 Que es crontab? Es un administrador de procesos en segundo plano. Los procesos indicados seran ejecutados en el momento que especifiques en el fichero crontab.
+```
+
++ Para tener Crontab configurado debemos editar el fichero con el comando `sudo crontab -u root -e`. Root user no tendrá crontab, creará uno nuevo. Habrá que añadir el comando `*/10 * * * * sh /ruta del script` -> `*/10 * * * * sh /home/luciama2/monitoring.sh` 
+
+```
+sudo crontab --help
+crontab [-u user] [-n] file
+-h			displays help
+file 		
+-n			checks the syntax, then bails out
+-u user		choose the user whose cronta is touched
+-e			edit user's crontab
+-l			list user's crontab
+-r			delete user's crontab
+-i			prompt before deleting user's crontab
+```
+
+# Bonus part
+
+Already done the necessary partitions to run the wordpress and DB on the first steps. Be aware of this.
+
+## Lighttpd
+
+```
+🧠 Que es Lighttpd❓ Es un servidor web diseñado para ser rápido, seguro, flexible, y fiel a los estándares. Está optimizado para entornos donde la velocidad es muy importante. Esto se debe a que consume menos CPU y memoria RAM que otros servidores.
+```
++ sudo apt install lighttpd
++ Permitimos kas conexiones mediante el puerto 80 con el comando `sudo ufw allow 80`
+	+ ufw: uncomplicated firewall
+	+ check with `sudo ufw status`
+
+## Wordpress
+
+```
+🧠 Que es Wordpress❓ Es un sistema de gestión de contenidos enfocado a la creación de cualquier tipo de página web.
+1 ◦ Para instalar la última versión de WordPress primero debemos instalar wget y zip. Para ello haremos uso del siguiente comando `sudo apt install wget zip`.
+🧠 Que es wget❓ Es una herramienta de línea de comandos que se utiliza para descargar archivos de la web.
+🧠 Que es zip❓ Es una utilidad de línea de comandos para comprimir y descomprimir archivos en formato ZIP.
+```
++ `sudo apt install wget zip`
++ cd /var/www -> descargar la ultima versión de Wordpress aquí: `sudo wget https://es.wordpress.org/latest-es_Es.zip`
++ `sudo unzip latest-es_ES.zip`
++ renommbrar las carpetas:
+	+ `sudo mv html/ html_old/`
+	+ `sudo mv wordpress/ html``
++ Establecer permisos en la carpeta html con `sudo chmod -R 755 html`
+
+## Mariadb
+
+```
+🧠 Que es MariaDB❓ Es una base de datos. Se utiliza para diversos fines, como el almacenamiento de datos, el comercio electrónico, funciones a nivel empresarial y las aplicaciones de registro.
+```
++ `sudo apt install mariadb-server``
++ restringir el acceso al servidor y eliminar cuenta no utilizadas: `sudo mysql_secure_installation`
++ mariadb
+	+ CREATE DATABASE wp_database;
+	+ SHOW DATABASES;
+	+ CREATE USER 'luciama2@localhost' IDENTIFIED BY '12345';
+	+ GRANT ALL PRIVILEGES ON wp_database.* TO 'luciama2@localhost';
+	+ FLUSH PRIVILEGES
+	+ exit
+
+## PHP
+
+```
+🧠 Que es PHP❓ Es un lenguaje de programación. Se utiliza principalmente para desarrollar aplicaciones web dinámicas y sitios web interactivos. PHP se ejecuta en el lado del servidor.
+```
++ sudo apt install php-cgi php-mysql
+
+### Configuracion wordpress
+
++ cd /var/www/html
++ copiar el fichero wp-config-sample.php y lo renombraremos wp-congig.php -> `cp wp-config-sample.php wp-config.php`
++ editar el archivo `vim wp-config.php` y modificaremos:
+	+ 'database_name_here' > 'wp_database'
+	+ 'username_here' > 'luciama2'
+	+ 'password_here' > '12345'
++ Habilitamos el moduflo fastcgi-php en Lighttpd para mejorar el rendimiento y la velocidada de las aplicaciones web en el servidor `sudo lighty-enable-mod fastcgi-php`
++ Actualizamos y aplicamos los cambios en la configuración con el comando `sudo service lighttpd force-reload`
++ Una vez hemos completado los pasos anteriores podemos volver a dirigirnos a nuestro navegador y escribiremos `localhost`
++ para ver el sitio de wordpress -> acceder desde el navegador a `localhost`
+
+## Servicio adicional: Nginx
+
+https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-debian-11
+https://www.tecmint.com/change-nginx-port-in-linux/
+
+
+
+
+
+# Signature.txt
+
+Este archivo es el que se envía al repositorio de la vogsphere.
