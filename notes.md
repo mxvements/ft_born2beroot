@@ -430,14 +430,36 @@ Already done the necessary partitions to run the wordpress and DB on the first s
 + Una vez hemos completado los pasos anteriores podemos volver a dirigirnos a nuestro navegador y escribiremos `localhost`
 + para ver el sitio de wordpress -> acceder desde el navegador a `localhost`
 
-## Servicio adicional: Nginx
+## Servicio adicional: phpMyAdmin
+https://www.tecmint.com/install-lighttpd-in-ubuntu/
 
-https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-debian-11
-https://www.tecmint.com/change-nginx-port-in-linux/
++ `sudo apt install phpmyadmin`
++ During installation
+	+ Choose to not configure the database w/ dbconfig-common
+	+ Use ligghttpd as a webbserver to reconfigure automatically
++ go to `http://localhost/phpmyadmin` and insert the database user and passw (luciama2 - '12345', in my case)
++ after this, a UI for the admin of the db is shown
 
 
+## Servicio adicional: FTP service
 
+```
+🧠 Que es FTP❓ FTP significa 'File Transfer Protocol' es un protocolo de redes para la transmision de archivos entre ordenadores a través de una conexión vía internet ('Transmission Control Protocol/Internet Protocol'). Las conexiones FTP tienen una relación de cliente y servidor. Esto quiere decir que un ordenador tiene que estar configurado como servidor FTP, ese en el que se aloja el contenido, y luego tú te conectas a él como un cliente. 
+```
 
++ `sudo apt install proftpd`
++ `sudo adduser ftpuser`
++ By default, phMyAdmin runs on port 21, must allow the port on the uwf
+	+ sudo ufw allow 21, this port only allows to connect to the client
++ In order for the server to connect and transmit files with the client, we must allow a range of ports for the data transmission
+	+ `sudo vim /etc/proftpd/proftpd.conf` edit:
+		+ line39, allow `DefaultRoot ~`
+		+ line51, reset passive ports as `PassivePorts 49000 49010`
+		+ line56, set `MasqueradeAddress` for the localhost IP `127.0.0.1`
++ The port range 49000:49010 must be added to the ufw: `sudo ufw allow 49000:4900/tcp`
++ `sudo systemctl restart proftpd`
++ After all this must add the port to the Networking section of out virtual machine on VirtualBox, me must add the 21 port and all ports for data transfer.
++ Then we can install on the client Filezila (the client) and connect to the server. The user we must add is the server user (in my case, luciama2 and the corresponding passw)
 
 # Signature.txt
 
