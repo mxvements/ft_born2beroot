@@ -105,10 +105,10 @@ Es un gestor de volúmenes lógicos. Proporciona un método para asignar espacio
 
 ### Simple setup
 
-+ Ensure that the machine does not have a graphical environment at launch. A password will be requested before attempting to connect to this machine. Finllay, connect with a user with the help of the student being evaluated. This user must not be root. Pay attention to the password chosen, it must follow the rules imposed in the subject.
++ Ensure that the machine does not have a graphical environment at launch. A password will be requested before attempting to connect to this machine. Finally, connect with a user with the help of the student being evaluated. This user must not be root. Pay attention to the password chosen, it must follow the rules imposed in the subject.
 + Check that the UFW service is started with the help of the evaluator
 + Check that the SSH service is started with the help of the evaluator.
-+ Check that the cchosen operating system is Debian or Rocky with the help of the evaluator. If something does not work as expected or is not clearly explained, the evaluator stops here.
++ Check that the chosen operating system is Debian or Rocky with the help of the evaluator. If something does not work as expected or is not clearly explained, the evaluator stops here.
 
 **Comprobar que no hay ninguna interfaz grafica en uso**
 ```sh
@@ -132,6 +132,28 @@ sudo service ufw status
 #cmmd
 sudo service ssh status
 ```
+**Check OS**
+```sh
+hostnamectl
+uname -a # uname --help
+```
+
+***
+
+### User
+
+The subject requests that a user with the login of the student being evaluated is present on the virtual machine. Check that it has been added and that it belongs to the `sudo` and `user42` groups.
+
+Make sure the rules imposed in the subject concerning the password policy have been put in place by following the following steps.
+
+First, ccreate a new user. Assign it a password of your choice, respecting the subject rules. The student being evaluated must now explain to you how they were able to set up the rules requested in the subject on their virtual machine.
+
+Normally there should be one or two modified files. If there is any problem, the evaluation stops here.
+
++ Now that yyou have a new user, ask the student being evaluatd to create a group named `evaluating` in front of you and assign it to this user. Finally, check that this user belongs to the `evaluating` group.
+
++ Finally, ask the student beng evaluated to explain the advantages of this password policy, as wel as the advantages and disadvantages of its implementation. Of course, anwering that it is because the subject asks for it does not count.
+
 **Comprobar que tus usuario esté dentro de los grupos sudo uu user42**
 ```sh
 #cmnd
@@ -156,6 +178,19 @@ sudo adduser name_user evaluating
 #check
 udo getent group evaluating
 ```
+
+***
+
+### Hostname and partitions
+
++ Check that the hostname of the machine is correctly formatted as follows: login42 (login of the student being evaluated)
++ Modify this hostname by replaing the login with yours, the restart the machine. If on restart, the hostname has not been updated, the eval stops here.
++ You can now resttore the machine to the original hostname
++ Ask the student being evaluated ho to view partitions for this virtual machine
++ Compare the output with the example given on the subject. Please note: if the student evaluated make the bonuses, it will necessary to refer to the bonuse example.
+
+This part is an opportunity to discuss the scores! the student being evaluated should give a brief explanation on how LVM works and what it is all about.
+
 **Check hostname and modify it**
 ```sh
 #check hostname
@@ -169,12 +204,23 @@ sudo vim /etc/hostname
 
 # then check again
 hostname 
+# then restore hostname to the original hostname
 ```
 **Comprobar que todas las particiones son como en el subject**
 ```sh
 #cmnd
 lsblk
 ```
+
+***
+
+### SUDO
+
++ Check that the 'sudo' program is properly installed on the virtual machine
++ the student being evaluated should now show assigning you new user to the sudo group
++ The subject imposes strit rules for sudo. The student being evaluated must first explain the vaue and operation of sudo uding examples of their choice. In a second step, it must show you the imlementation of the rules imposed by the subject.
++ Verify that the '/var/log/sudo' folder exists and has at least one file. Check the contents of he filles in this folder, you should see a history of the commands used with sudo. Finally, try to run a command via sudo. See if the file(s) in the '/var/log/sudo/' folder have been updated.
+
 **check sudo**
 ```sh
 #cmnd most common used, not a good practice
@@ -191,45 +237,28 @@ getent group sudo
 ```
 **Show sudo rules**
 ```sh
+#cmnd
 nano /etc/sudoers.d/sudo_config
+#should show:
+#	passwd_tries=3
+#	baspass_message=
+#	logfile="/var/log/config"
+#	log_input, log_ouput
+#	iolog_dir="/var/log/sudo"
+#	requirrety
+#	secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
 ```
 
-***
-
-### User
-
-The subject requests that a user with the login of the student being evaluated is present on the virtual machine. Check that it has been added and that it belongs to the `sudo` and `user42` groups.
-
-Make sure the rules imposed in the subject concerning the password policy have been put in place by following the following steps.
-
-First, ccreate a new user. Assign it a password of your choice, respecting the subject rules. The student being evaluated must now explain to you how they were able to set up the rules requested in the subject on their virtual machine.
-
-Normally there should be one or two modified files. If there is any problem, the evaluation stops here.
-
-+ Now that yyou have a new user, ask the student being evaluatd to create a group named `evaluating` in front of you and assign it to this user. Finally, check that this user belongs to the `evaluating` group.
-
-+ Finally, ask the student beng evaluated to explain the advantages of this password policy, as wel as the advantages and disadvantages of its implementation. Of course, anwering that it is because the subject asks for it does not count.
-
-***
-
-### Hostname and partitions
-
-+ Check that the hostname of the machine is correctly formatted as follows: login42 (login of the student being evaluated)
-+ Modify this hostname by replaing the login with yours, the restart the machine. If on restart, the hostname has not been updated, the eval stops here.
-+ You can now resttore the machine to the original hostname
-+ Ask the student being evaluated ho to view partitions for this virtual machine
-+ Compare the output with the example given on the subject. Please note: if the student evaluated make the bonuses, it will necessary to refer to the bonuse example.
-
-This part is an opportunity to discuss the scores! the student being evaluated should give a brief explanation on how LVM works and what it is all about.
-
-***
-
-### SUDO
-
-+ Check that the 'sudo' program is properly installed on the virtual machine
-+ the student being evaluated should now show assigning you new user to the sudo group
-+ The subject imposes strit rules for sudo. The student being evaluated must first explain the vaue and operation of sudo uding examples of their choice. In a second step, it must show you the imlementation of the rules imposed by the subject.
-+ Verify that the '/var/log/sudo' folder exists and has at least one file. Check the contents of he filles in this folder, you should see a history of the commands used with sudo. Finally, try to run a command via sudo. See if the file(s) in the '/var/log/sudo/' folder have been updated.
+**Show sudo command history on /var/log/sudo**
+```sh
+#cmnd
+cd /var/log/sudo
+ls
+cat sudo_config
+#execute a sudo command and show it works
+sudo nano hello4world
+cat sudo_config
+```
 
 ***
 
@@ -241,6 +270,30 @@ This part is an opportunity to discuss the scores! the student being evaluated s
 + Verify that the SSH service only uses port 4242
 + The student being evauated should help you use SSH in order to log in with the newly created user. To do this, you can se a key or a simple password. It will depend on the student being evaluated. Of course, you have to make sure that you cannot use SSH with the root user as stated in the subject. If something does not work as expected or ir not clearly explained, the evaluation stops here.
 
+**Check ufw is installed**
+```sh
+#cmnd
+dpkg -s ufw
+sudo service ufw status
+```
+
+**Check active rules on ufw**
+```sh
+#cmnd
+sudo ufw status numbered
+```
+
+**Create a new rule on port 8080 and check it**
+```sh
+
+# crete rule
+sudo ufw allow 8080
+sudo ufw status numbered # it creates 2 rules
+# delete rule
+sudo ufw delete num_rule # we need to delete 2 rules
+sudo ufw status numbered
+```
+
 ***
 
 ### Script monitoring
@@ -249,6 +302,31 @@ The student should explain.
 + how their script works by showing you the code.
 + what 'cron' is
 + how the student being evaluated set up their script so that it runs every 10 minutes from when the server starts. Once the correct functioning of the script has been verified, the student being evaluated should ensure that this scripts runs every minute.. You can run whatever you want to make sure the script runs with dynamic values correctly. Finally, the student being evaluated should make the script stop running when the server has started up, but without modifying the script itself. To check this point, you will have to resstart the server one last time. At startup, it will be necessary to check that the script still exists in the same place, that its rights have remaind unchanged, and that it has not been modified.
+
+**Check if ssh is installed and that it works correctly**
+```sh
+which ssh
+sudo service ssh status
+```
+
+**Use ssh to init session with the new created user**
+```sh
+# first check that with the root user we cannot,
+ssh root@localhost -p 4242 #permission denied
+ssh newuser@localhost -p 4242
+```
+
+**Modify script to change exec time to 1min**
+```sh
+sudo crontab -u root -e
+```
+
+**Stop the script once the server is running, w/o modifying the script**
+```sh
+sudo /etc/init.d/cron stop
+# if we want to start it..
+sudo /etc/init.d/cron start
+```
 
 ***
 
