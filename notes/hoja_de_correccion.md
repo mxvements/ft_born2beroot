@@ -68,7 +68,7 @@ Debian utiliza tres ramas principales: "Stable" (estable), "Testing" (pruebas), 
 
 
 4. Gestión de Paquete
-Rocky es rhel/dnf. Debian es... Deb/apt.
+**Rocky es rhel/dnf. Debian es... Deb/apt.**
 
 Rocky Linux:
 Utiliza el sistema de gestión de paquetes "dnf" (Dandified YUM), que es una evolución de "yum". Dnf es usado en distribuciones basadas en Red Hat, como Fedora y CentOS.
