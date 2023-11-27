@@ -259,3 +259,4 @@ file
 # Signature.txt
 
 Este archivo es el que se envía al repositorio de la vogsphere.
+`shasum nombremaquina.vdi`
