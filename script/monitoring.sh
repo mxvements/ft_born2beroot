@@ -16,9 +16,9 @@ ramtot=$(free -mega | awk '$1 == "Mem:" {printf $2}')
 ramperc=$(free --mega | awk '$1 == "Mem:" {printf("(%2.f%%)\n", $3/$2*100)}')
 
 #	5	DISK USE
-memuse=$(df -m | grep "/dev/" | grep "/boot" | awk '{memuse += $3} END {print memuse}')
-memtot=$(df -m | grep "/dev/" | grep "/boot" | awk '{memtot += $2} END {print memtot}')
-memperc=$(df -m | grep -v "/dev/" | grep "/boot" | awk '{memuse += $3} {memtot += $2} END {printf("(%.2f%%)\n", memuse/memtot*100)}')
+memuse=$(df -m | grep "/dev/" | grep -v "/boot" | awk '{memuse += $3} END {print memuse}')
+memtot=$(df -m | grep "/dev/" | grep -v "/boot" | awk '{memtot += $2} END {printf("%.1f\n"; memtot/1024)}')
+memperc=$(df -m | grep "/dev/" | grep -v "/boot" | awk '{memuse += $3} {memtot += $2} END {printf("(%d%%)", memuse/memtot*100)}')
 
 #	6	USE% ON DISK / CPU LOAD
 diskuse=$(vmstat 1 4 | tail -1 | awk'{print $15}')
