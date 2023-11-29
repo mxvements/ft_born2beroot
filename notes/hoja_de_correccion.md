@@ -98,7 +98,7 @@ Es un módulo de seguridad del kernel Linux que permite al administrador del sis
 
 **¿Qué es LVM❓**
 ```
-Es un gestor de volúmenes lógicos. Proporciona un método para asignar espacio en dispositivos de almacenamiento masivo, que es más flexible que los esquemas de particionado convencionales para almacenar volúmenes.
+Logical Volume Manager. Es un gestor de volúmenes lógicos. Proporciona un método para asignar espacio en dispositivos de almacenamiento masivo, que es más flexible que los esquemas de particionado convencionales para almacenar volúmenes.
 ```
 
 ***
@@ -110,34 +110,23 @@ Es un gestor de volúmenes lógicos. Proporciona un método para asignar espacio
 + Check that the SSH service is started with the help of the evaluator.
 + Check that the chosen operating system is Debian or Rocky with the help of the evaluator. If something does not work as expected or is not clearly explained, the evaluator stops here.
 ```
-**Comprobar que no hay ninguna interfaz grafica en uso**
+
 ```sh
-# command to use
+# check no graphic interface is in use
 ls /usr/bin/*session
-# result expected
-/usr/bin/dbus-run-session
-```
-**Comprobar qu el servicio UFW está en uso**
-```sh
-# cmmd to use, check status on ufw
+# rslt: /usr/bin/dbus-run-session
+
+# check ufw status
 sudo ufw status
-# rslt -> status: active
-
-# cmmd to use, check status on services
 sudo service ufw status
-#rslt -> report on status, should be highlighted as active
-```
-**Comprobar que el servicio SSH está en uso**
-```sh
-#cmmd
-sudo service ssh status
-```
-**Check OS**
-```sh
-hostnamectl
-uname -a # uname --help
-```
 
+# check kssh status
+sudo service ssh status
+
+# check OS
+hostnamectl
+uname -a
+```
 ***
 
 ### User
@@ -154,31 +143,24 @@ Normally there should be one or two modified files. If there is any problem, the
 
 + Finally, ask the student beng evaluated to explain the advantages of this password policy, as wel as the advantages and disadvantages of its implementation. Of course, anwering that it is because the subject asks for it does not count.
 ```
-**Comprobar que tus usuario esté dentro de los grupos sudo uu user42**
+
 ```sh
-#cmnd
+# check groups to see if user is included
 getent group sudo
 getent group user42
-```
-**Crear un nuevo usuario y mostrar que sigue la política de constraseñas que hemos creado**
-```sh
-#cmnd
-sudo adduser name_user
-#introduce a compliant passw
-```
-**Create 'evaluating' group**
-```sh
-#cmnd
-sudo addgroup evaluating
-```
-**Add new user to group**
-```sh
-#cmnd
-sudo adduser name_user evaluating
-#check
-getent group evaluating
-```
+cat /etc/group # check all groups
+car /etc/sudoers # check permissions
 
+# create new user & new group, then add user to group
+sudo adduser name_user
+sudo addgroup evaluating
+sudo adduser name_user evaluating
+#check it again
+getent group evaluating
+
+# explain pasww policy
+cat /etc/pam.d/common-password
+```
 ***
 
 ### Hostname and partitions
@@ -191,24 +173,28 @@ getent group evaluating
 
 This part is an opportunity to discuss the scores! the student being evaluated should give a brief explanation on how LVM works and what it is all about.
 ```
-**Check hostname and modify it**
+
 ```sh
 #check hostname
 hostname
+
+# (1st option)
 #modify hostname to replace former login to evaluator login
 sudo nano /etc/hostname
+sudo nano /etc/hosts
 #or...
 sudo vim /etc/hostname
-
+sudo vim /etc/hosts
 # reboot VM
-
 # then check again
 hostname 
 # then restore hostname to the original hostname
-```
-**Comprobar que todas las particiones son como en el subject**
-```sh
-#cmnd
+
+# (2nd option)
+#modify temporarily hostname
+sudo hostname new_user42
+
+# check partitions
 lsblk
 ```
 
@@ -221,24 +207,17 @@ lsblk
 + The subject imposes strit rules for sudo. The student being evaluated must first explain the vaue and operation of sudo uding examples of their choice. In a second step, it must show you the imlementation of the rules imposed by the subject.
 + Verify that the '/var/log/sudo' folder exists and has at least one file. Check the contents of he filles in this folder, you should see a history of the commands used with sudo. Finally, try to run a command via sudo. See if the file(s) in the '/var/log/sudo/' folder have been updated.
 ```
-**check sudo**
+
 ```sh
-#cmnd most common used, not a good practice
 which sudo
-# or, as good practice:
 dpkg -s sudo
-```
-**add new user to sudo**
-```sh
-#cmnd
-sudo cat /etc/sudoers
+
+# add new user to sudo
+sudo vim /etc/sudoers # sudo permissions
 sudo adduser name_user sudo
-#check group
 getent group sudo
-```
-**Show sudo rules**
-```sh
-#cmnd
+
+# show sudo rules
 nano /etc/sudoers.d/sudo_config
 #should show:
 #	passwd_tries=3
@@ -248,17 +227,14 @@ nano /etc/sudoers.d/sudo_config
 #	iolog_dir="/var/log/sudo"
 #	requirrety
 #	secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
-```
 
-**Show sudo command history on /var/log/sudo**
-```sh
-#cmnd
+# show sudo command history
 cd /var/log/sudo
 ls
-cat sudo_config
+cat sudo_config | wc -l
 #execute a sudo command and show it works
-sudo nano hello4world
-cat sudo_config
+sudo echo hello4world
+cat sudo_config | wc -l # +2  lines
 ```
 
 ***
@@ -273,21 +249,12 @@ cat sudo_config
 ```
 **Check ufw is installed**
 ```sh
-#cmnd
 dpkg -s ufw
 sudo service ufw status
-```
 
-**Check active rules on ufw**
-```sh
-#cmnd
+# check active rues
 sudo ufw status numbered
-```
-
-**Create a new rule on port 8080 and check it**
-```sh
-
-# crete rule
+# create rule
 sudo ufw allow 8080
 sudo ufw status numbered # it creates 2 rules
 # delete rule
@@ -304,28 +271,19 @@ The student should explain.
 + what 'cron' is
 + how the student being evaluated set up their script so that it runs every 10 minutes from when the server starts. Once the correct functioning of the script has been verified, the student being evaluated should ensure that this scripts runs every minute.. You can run whatever you want to make sure the script runs with dynamic values correctly. Finally, the student being evaluated should make the script stop running when the server has started up, but without modifying the script itself. To check this point, you will have to resstart the server one last time. At startup, it will be necessary to check that the script still exists in the same place, that its rights have remaind unchanged, and that it has not been modified.
 ```
-**Check if ssh is installed and that it works correctly**
+
 ```sh
 which ssh
 sudo service ssh status
-```
-
-**Use ssh to init session with the new created user**
-```sh
 # first check that with the root user we cannot,
 ssh root@localhost -p 4242 #permission denied
 ssh newuser@localhost -p 4242
-```
 
-**Modify script to change exec time to 1min**
-```sh
+# modify script to change exec time
 sudo crontab -u root -e
-```
 
-**Stop the script once the server is running, w/o modifying the script**
-```sh
+# stop/start crontab
 sudo /etc/init.d/cron stop
-# if we want to start it..
 sudo /etc/init.d/cron start
 ```
 
