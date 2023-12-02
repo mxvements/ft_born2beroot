@@ -86,6 +86,7 @@ At 42 School, it is expected that almost every project is written in accordance 
 - ...
 ```
 ## Aknowledgments
++ This tutorial by [gemartin99](https://github.com/gemartin99/Born2beroot-Tutorial).
 
 # License
 [MIT License](https://github.com/mxvements/ft_license/blob/main/LICENSE.txt)
